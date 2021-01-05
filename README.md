@@ -1,1 +1,1 @@
-# Bunny-CDN-Python-Lib
+# BunnyCDN Python Lib
