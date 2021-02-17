@@ -1,6 +1,12 @@
+
 '''This code is to use the BunnyCDN Storage API'''
+
+
 import requests
 from requests.exceptions import HTTPError
+
+
+
 class Storage():
     #initializer for storage account
     def __init__(self,api_key,storage_zone,storage_zone_region='de'):
@@ -30,6 +36,7 @@ class Storage():
         else:
             self.base_url = 'https://'+storage_zone_region+'.storage.bunnycdn.com/'+storage_zone+'/'
     
+
 
     def GetStorageZoneFile(self,storage_path,download_path=None):
             '''
@@ -72,8 +79,6 @@ class Storage():
                             file.write(chunk)
                     print("File downloaded Successfully")
             
-                
-
             
     
     def PutFile(self,file_name,local_upload_file_path=None,storage_path='' ):
@@ -104,7 +109,7 @@ class Storage():
         '''
         #Add code below
    
-   
+
     def Get_Storaged_Objects_List(self,storage_path=''):
         '''
         This functions returns a list of files and directories located in given storage_path.
