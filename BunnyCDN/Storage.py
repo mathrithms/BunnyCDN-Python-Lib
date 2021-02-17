@@ -40,7 +40,7 @@ class Storage():
 
     def GetStorageZoneFile(self,storage_path,download_path=None):
             '''
-            This function will get the files and subfolders of storage zone mentioned in path and returns them as response objects
+            This function will get the files and subfolders of storage zone mentioned in path and download it to the download_path location mentioned
                         
             Parameters
             ----------
