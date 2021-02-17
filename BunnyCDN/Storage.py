@@ -73,7 +73,10 @@ class Storage():
                     download_path=file_name
                 else:
                     download_path+='\\' + file_name
+                
+                #Downloading file
                 with open(download_path,'wb') as file:
+                    
                     for chunk in response.iter_content(chunk_size=1024):
                         if chunk:
                             file.write(chunk)
