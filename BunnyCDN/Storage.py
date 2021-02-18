@@ -5,6 +5,8 @@
 
 import requests
 from requests.exceptions import HTTPError
+from requests.models import Response
+from requests.sessions import default_headers
 
 
 
@@ -90,42 +92,110 @@ class Storage():
     
     def PutFile(self,file_name,local_upload_file_path=None,storage_path='' ):
 
-        '''
-        This function uploads files to your BunnyCDN storage zone
-        
-        Parameters
-        ----------
-        storage_path                : String
-                                      The path of directory in storage zone to which file is to be uploaded
-        file_name                   : String
-                                      The name of the file with which it is to be saved in storage zone
-        local_upload_file_path      : String
-                                      The path of file as stored in local server from where we upload to BunnyCDN storage
-        '''
-        #Add code below
-    
+            '''
+            This function uploads files to your BunnyCDN storage zone
+            
+            Parameters
+            ----------
+            storage_path                : String
+                                        The path of directory in storage zone to which file is to be uploaded
+            file_name                   : String
+                                        The name of the file with which it is to be saved in storage zone
+            local_upload_file_path      : String
+                                        The path of file as stored in local server from where we upload to BunnyCDN storage
+            '''
+            #Add code below
+            if local_upload_file_path==None:
+                local_upload_file_path==file_name
+
+            assert storage_path !='',"storage_path must be specified"#to make sure storage_path is not null
+                #to build correct url
+            if storage_path[0]=='/':
+                storage_path=storage_path[1:]
+            if storage_path[-1]=='/' :
+                url=self.base_url+storage_path[:-1]
+            else:
+                url=self.base_url+storage_path
+            with open(file_name,'rb') as file:
+                file_data=file.read()
+
+            response=requests.put(url,data=file_data,headers=self.headers)
+            try:
+                response.raise_for_status()
+            except HTTPError as http:
+                print("Upload Failed")
+                print(f'HTTP Error Occured: {http}')
+            else:
+                print("The File Upload was Successful")
+                
 
     def DeleteFile(self,storage_path=''):
-        '''
-        This function deletes a file mentioned in the storage_path from the storage zone
+            '''
+            This function deletes a file mentioned in the storage_path from the storage zone
 
-        Parameters
-        ----------
-        storage_path : The directory path to your file(including file name) which is to be deleted.
-                       If this is the root of your storage zone, you can ignore this parameter.
-        '''
-        #Add code below
+            Parameters
+            ----------
+            storage_path : The directory path to your file(including file name) which is to be deleted.
+                        If this is the root of your storage zone, you can ignore this parameter.
+            '''
+                #Add code below
+            assert storage_path !='',"storage_path must be specified"#to make sure storage_path is not null
+            #to build correct url
+            if storage_path[0]=='/':
+                storage_path=storage_path[1:]
+            if storage_path[-1]=='/' :
+                url=self.base_url+storage_path[:-1]
+            else:
+                url=self.base_url+storage_path
+            
+            response=requests.delete(url,headers=self.headers)
+            try:
+                response.raise_for_status
+            except HTTPError as http:
+                print(f'HTTP Error occured: {http}')
+                print('Object Delete failed ')
+            else:
+                print("Object Successfully Deleted")
+
    
 
     def Get_Storaged_Objects_List(self,storage_path=''):
-        '''
-        This functions returns a list of files and directories located in given storage_path.
+            '''
+            This functions returns a list of files and directories located in given storage_path.
 
-        Parameters
-        ----------
-        storage_path : The directory path that you want to list.
-        '''
-        #Add code below
+            Parameters
+            ----------
+            storage_path : The directory path that you want to list.
+            '''
+            #Add code below
+            assert storage_path !='',"storage_path must be specified"#to make sure storage_path is not null
+            #to build correct url
+            if storage_path[0]=='/':
+                storage_path=storage_path[1:]
+            if storage_path[-1]=='/' :
+                url=self.base_url+storage_path[:-1]
+            else:
+                url=self.base_url+storage_path
+            try:
+                response=requests.get(url,headers=self.headers,type=list)
+                response.raise_for_status()
+            except HTTPError as http:
+                print(f'http error occured {http}')
+            else:
+                storage_list={}
+                for number in range(len(response)):
+                    for key in response[number]:
+                        if key == 'ObjectName':
+                            storage_list[number+1]=response[number][key]
+                print('A List of Objects')
+                return storage_list
+
+
+        
+
+        
+
+
 
 
     
