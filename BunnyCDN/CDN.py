@@ -34,6 +34,8 @@ class CDN():
                 url=self.base_url + Task_name[1:-1]
             else:
                 url=self.base_url + Task_name[1:]
+        elif Task_name[-1]=='/':
+             url=self.base_url + Task_name[1:-1]
         else:
             url=self.base_url + Task_name
         return url
@@ -177,6 +179,7 @@ class CDN():
                 storage_list.append({storagezone['Name']:storagezone['Id']})
                
             return storage_list
+    
     def AddStorageZone(self,storage_zone_name,storage_zone_region='DE',ReplicationRegions=['DE']):
         '''
         This method creates a new storage zone
