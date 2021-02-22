@@ -211,6 +211,26 @@ class CDN():
         else:
             print(f"Successfully created new Storage Zone:{storage_zone_name}")
 
+    def GetStorageZone(self,storage_zone_id):
+        '''
+        This function returns details about the storage zone whose id is mentioned
+
+        Parameters
+        ----------
+        storage_zone_id     : The ID of the Storage Zone to return
+
+        '''
+        try :
+            response=requests.get(self._Geturl(f'storagezone/{storage_zone_id}'),headers=self.headers)
+            response.raise_for_status()
+        except HTTPError as http:
+            print(f'HTTP Error occured : {http}')
+        except Exception as err:
+            print(f'Error occured :{err}')
+        else:
+            return response.json()
+
+
 
 
            
