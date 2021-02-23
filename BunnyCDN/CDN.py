@@ -72,11 +72,11 @@ class CDN():
             response=requests.post(self._Geturl('pullzone/addCertificate'),data=values,headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            print(f'HTTP Error occured:{http}')
+            return {'status':'error','HTTP':response.status_code,'msg':http}
         except Exception as err:
-            print(f'Error occured:{err}')
+            return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
-            print(f'Certificated Added successfully to PullZoneId:{PullZoneId},Hostname:{Hostname}')
+           return {'status':'success','HTTP':response.status_code,'msg':f'Certificated Added successfully to PullZoneId:{PullZoneId},Hostname:{Hostname}'}
     
     def AddBlockedIp(self,PullZoneId,BlockedIp):
         '''
@@ -98,11 +98,11 @@ class CDN():
             response=requests.post(self._Geturl('pullzone/addBlockedIp'),data=values,headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            print(f'HTTP Error occured : {http}')
+            return {'status':'error','HTTP':response.status_code,'msg':http}
         except Exception as err:
-            print(f'Error occured :{err}')
+            return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
-            print(f"Ip successfully added to list of blocked IPs for pullzone id: {PullZoneId}")
+            return {'status':'success','HTTP':response.status_code,'msg':f"Ip successfully added to list of blocked IPs for pullzone id: {PullZoneId}"}
         
     def RemoveBlockedIp(self,PullZoneId,BlockedIp):
         '''
@@ -124,11 +124,11 @@ class CDN():
             response=requests.post(self._Geturl('pullzone/removeBlockedIp'),data=values,headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            print(f'HTTP Error occured : {http}')
+            return {'status':'error','HTTP':response.status_code,'msg':http}
         except Exception as err:
-            print(f'Error occured :{err}')
+            return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
-            print(f"Ip successfully removed from list of blocked IPs for pullzone id: {PullZoneId}")
+            return {'status':'success','HTTP':response.status_code,'msg':f"Ip successfully removed from list of blocked IPs for pullzone id: {PullZoneId}"}
     
     def StorageZoneData(self):
         '''
@@ -139,9 +139,9 @@ class CDN():
             response=requests.get(self._Geturl('storagezone'),headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            print(f'HTTP Error occured : {http}')
+            return {'status':'error','HTTP':response.status_code,'msg':http}
         except Exception as err:
-            print(f'Error occured :{err}')
+            return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
 
             storage_summary=[]
@@ -169,9 +169,9 @@ class CDN():
             response=requests.get(self._Geturl('storagezone'),headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            print(f'HTTP Error occured : {http}')
+            return {'status':'error','HTTP':response.status_code,'msg':http}
         except Exception as err:
-            print(f'Error occured :{err}')
+            return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
 
             storage_list=[]
@@ -205,11 +205,11 @@ class CDN():
             response=requests.post(self._Geturl('storagezone'),data=values,headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            print(f'HTTP Error occured : {http}')
+            return {'status':'error','HTTP':response.status_code,'msg':http}
         except Exception as err:
-            print(f'Error occured :{err}')
+            return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
-            print(f"Successfully created new Storage Zone:{storage_zone_name}")
+            return {'status':'success','HTTP':response.status_code,'msg':f'Added new Storage Zone :{storage_zone_name}'}
 
     def GetStorageZone(self,storage_zone_id):
         '''
@@ -224,11 +224,30 @@ class CDN():
             response=requests.get(self._Geturl(f'storagezone/{storage_zone_id}'),headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            print(f'HTTP Error occured : {http}')
+            return {'status':'error','HTTP':response.status_code,'msg':http}
         except Exception as err:
-            print(f'Error occured :{err}')
+            return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
             return response.json()
+
+    def DeleteStorageZone(self,storage_zone_id):
+        '''
+        This method deletes the Storage zone with id : storage_zone_id
+        
+        Parameters
+        ----------
+        storage_zone_id :   int64
+                            The ID of the storage zone that should be deleted
+        '''
+        try :
+            response=requests.delete(self._Geturl(f'storagezone/{storage_zone_id}'),headers=self.headers)
+            response.raise_for_status()
+        except HTTPError as http:
+            return {'status':'error','HTTP':response.status_code,'msg':http}
+        except Exception as err:
+            return {'status':'error','HTTP':response.status_code,'msg':err}
+        else:
+            return {'status':'Success','HTTP':response.status_code, 'msg':response.json()}
 
 
 
