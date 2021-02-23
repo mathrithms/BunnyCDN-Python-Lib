@@ -209,15 +209,18 @@ class CDN():
         except Exception as err:
             return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
-            return {'status':'success','HTTP':response.status_code,'msg':f'Added new Storage Zone :{storage_zone_name}'}
+            return {'status':'success','HTTP':response.status_code,'msg':response.json()}
 
+    
     def GetStorageZone(self,storage_zone_id):
+
         '''
         This function returns details about the storage zone whose id is mentioned
 
         Parameters
         ----------
-        storage_zone_id     : The ID of the Storage Zone to return
+        storage_zone_id     :   int64 
+                                The ID of the Storage Zone to return
 
         '''
         try :
@@ -230,6 +233,7 @@ class CDN():
         else:
             return response.json()
 
+    
     def DeleteStorageZone(self,storage_zone_id):
         '''
         This method deletes the Storage zone with id : storage_zone_id
@@ -248,6 +252,60 @@ class CDN():
             return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
             return {'status':'Success','HTTP':response.status_code, 'msg':response.json()}
+        
+    def PurgeUrlCache(self,url):
+        '''
+        This method purges the given URL from our edge server cache.
+        
+        Parameters
+        ----------
+        url : string
+              The URL of the file that will be purged. Use a CDN enabled URL such as http://myzone.b-cdn.net/style.css
+        '''
+        try :
+            response=requests.post(self._Geturl(f'purge?url={url}'),headers=self.headers)
+            response.raise_for_status()
+        except HTTPError as http:
+            return {'status':'error','HTTP':response.status_code,'msg':http}
+        except Exception as err:
+            return {'status':'error','HTTP':response.status_code,'msg':err}
+        else:
+            return {'status':'Success','HTTP':response.status_code, 'msg':f'Purged Cache for url:{url}'}
+
+    def Billing(self):
+        '''
+        This method returns the current billing summary of the account
+
+        '''
+        try :
+            response=requests.get(self._Geturl('billing'),headers=self.headers)
+            response.raise_for_status()
+        except HTTPError as http:
+            return {'status':'error','HTTP':response.status_code,'msg':http}
+        except Exception as err:
+            return {'status':'error','HTTP':response.status_code,'msg':err}
+        else:
+            return response.json()
+
+    def ApplyCode(self,couponCode):
+        '''
+        This method applys promo code to the account
+        
+        Parameters
+        ----------
+        couponCode  :  The promo code that will be applied
+
+        '''
+        try :
+            response=requests.get(self._Geturl(f'billing/applycode'),params={'couponCode':couponCode} ,headers=self.headers)
+            response.raise_for_status()
+        except HTTPError as http:
+            return {'status':'error','HTTP':response.status_code,'msg':http}
+        except Exception as err:
+            return {'status':'error','HTTP':response.status_code,'msg':err}
+        else:
+            return {'status':'success','HTTP':response.status_code,'msg':f'Applied promo code:{couponCode} successfully'}
+
 
 
 
