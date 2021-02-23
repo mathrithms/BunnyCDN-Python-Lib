@@ -61,12 +61,12 @@ class CDN():
                               A base64 encoded binary certificate key file data
                               Value must be of format 'base64'
         '''
-        values ={
+        values ="""{
             "PullZoneId": PullZoneId,
             "Hostname": Hostname,
             "Certificate": Certificate,
             "CertificateKey": CertificateKey
-        }
+        }"""
 
         try:
             response=requests.post(self._Geturl('pullzone/addCertificate'),data=values,headers=self.headers)
@@ -89,10 +89,10 @@ class CDN():
         BlockedIP       : string
                           The IP address that will be blocked
         '''
-        values={
+        values="""{
             "PullZoneId": PullZoneId,
             "BlockedIp": BlockedIp
-        }
+        }"""
 
         try :
             response=requests.post(self._Geturl('pullzone/addBlockedIp'),data=values,headers=self.headers)
@@ -115,10 +115,10 @@ class CDN():
         BlockedIP       : string
                           The IP address that will be blocked
         '''
-        values={
+        values="""{
             "PullZoneId":PullZoneId,
             "BlockedIp": BlockedIp
-        }
+        }"""
 
         try :
             response=requests.post(self._Geturl('pullzone/removeBlockedIp'),data=values,headers=self.headers)
@@ -196,11 +196,11 @@ class CDN():
         (optional)                 The list of active replication regions for the zone
 
         '''
-        values ={
+        values ="""{
             'Name':storage_zone_name,
             'Region':storage_zone_region,
             'ReplicationRegions':ReplicationRegions
-        }
+        }"""
         try :
             response=requests.post(self._Geturl('storagezone'),data=values,headers=self.headers)
             response.raise_for_status()
