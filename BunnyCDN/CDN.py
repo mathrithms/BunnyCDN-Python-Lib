@@ -1,5 +1,6 @@
 
 import os
+import json
 import requests
 from requests.exceptions import HTTPError
 
@@ -61,12 +62,12 @@ class CDN():
                               A base64 encoded binary certificate key file data
                               Value must be of format 'base64'
         '''
-        values ="""{
+        values =json.dumps({
             "PullZoneId": PullZoneId,
             "Hostname": Hostname,
             "Certificate": Certificate,
             "CertificateKey": CertificateKey
-        }"""
+        })
 
         try:
             response=requests.post(self._Geturl('pullzone/addCertificate'),data=values,headers=self.headers)
@@ -89,10 +90,10 @@ class CDN():
         BlockedIP       : string
                           The IP address that will be blocked
         '''
-        values="""{
+        values=json.dumps({
             "PullZoneId": PullZoneId,
             "BlockedIp": BlockedIp
-        }"""
+        })
 
         try :
             response=requests.post(self._Geturl('pullzone/addBlockedIp'),data=values,headers=self.headers)
@@ -115,10 +116,10 @@ class CDN():
         BlockedIP       : string
                           The IP address that will be blocked
         '''
-        values="""{
+        values=json.dumps({
             "PullZoneId":PullZoneId,
             "BlockedIp": BlockedIp
-        }"""
+        })
 
         try :
             response=requests.post(self._Geturl('pullzone/removeBlockedIp'),data=values,headers=self.headers)
@@ -188,19 +189,26 @@ class CDN():
         ----------
         storage_zone_name        : string
                                    The name of the storage zone
+                                        1.Matches regex pattern: ^[a-zA-Z0-9]+$
+                                        2.Length of string must be less than, or equal to 20
+                                        3.Length of string must be greater than, or equal to 3
         
-        storage_zone_region      : String 
+        storage_zone_region      : string 
         (optional)                 The main region code of storage zone
+                                        1.Matches regex pattern: ^[a-zA-Z0-9]+$
+                                        2.Length of string must be less than, or equal to 2
+                                        3.Length of string must be greater than, or equal to 2
         
         ReplicationsRegions      : array
         (optional)                 The list of active replication regions for the zone
 
         '''
-        values ="""{
-            'Name':storage_zone_name,
-            'Region':storage_zone_region,
-            'ReplicationRegions':ReplicationRegions
-        }"""
+        values =  json.dumps( {
+            "Name": storage_zone_name,
+            "Region": storage_zone_region,
+            "ReplicationRegions":ReplicationRegions
+    
+        })
         try :
             response=requests.post(self._Geturl('storagezone'),data=values,headers=self.headers)
             response.raise_for_status()
@@ -263,7 +271,7 @@ class CDN():
               The URL of the file that will be purged. Use a CDN enabled URL such as http://myzone.b-cdn.net/style.css
         '''
         try :
-            response=requests.post(self._Geturl(f'purge?url={url}'),headers=self.headers)
+            response=requests.post(self._Geturl('purge'),params={'url':url} ,headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
             return {'status':'error','HTTP':response.status_code,'msg':http}
@@ -297,7 +305,7 @@ class CDN():
 
         '''
         try :
-            response=requests.get(self._Geturl(f'billing/applycode'),params={'couponCode':couponCode} ,headers=self.headers)
+            response=requests.get(self._Geturl('billing/applycode'),params={'couponCode':couponCode} ,headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
             return {'status':'error','HTTP':response.status_code,'msg':http}
@@ -305,6 +313,50 @@ class CDN():
             return {'status':'error','HTTP':response.status_code,'msg':err}
         else:
             return {'status':'success','HTTP':response.status_code,'msg':f'Applied promo code:{couponCode} successfully'}
+    
+    def Stats(self,dateFrom=None,dateTo=None,pullZone=None,serverZoneId=None,loadErrors=True):
+        '''
+        This method returns the statistics associated with your account as json object
+        
+        Parameters
+        ----------
+
+        dateFrom        : string
+        (optional)        The start date of the range the statistics should be returned for. Format: yyyy-mm-dd
+        
+        dateTo          : string
+        (optional)        The end date of the range the statistics should be returned for. Format: yyyy-MM-dd
+        
+        pullZone        : int64
+        (optional)        The ID of the Pull Zone for which the statistics should be returned
+        
+        serverZoneId    : int64
+        (optional)        The server zone for which the data should be returned.
+        
+        loadErrors      : boolean
+        (optional)        Set to true by default
+        '''
+
+        params={
+            'dateFrom':dateFrom,
+            'dateTo':dateTo,
+            'pullZone':pullZone,
+            'serverZoneId':serverZoneId,
+            'loadErrors':loadErrors 
+        }
+
+        try :
+            response=requests.get(self._Geturl('statistics'),params=params ,headers=self.headers)
+            response.raise_for_status()
+        except HTTPError as http:
+            return {'status':'error','HTTP':response.status_code,'msg':http}
+        except Exception as err:
+            return {'status':'error','HTTP':response.status_code,'msg':err}
+        else:
+            return response.json()
+
+
+
 
 
 
