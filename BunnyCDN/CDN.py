@@ -181,7 +181,7 @@ class CDN():
                
             return storage_list
     
-    def AddStorageZone(self,storage_zone_name,storage_zone_region='DE',ReplicationRegions=['DE']):
+    def AddStorageZone(self,storage_zone_name,storage_zone_region='DE',ReplicationRegions=[]):
         '''
         This method creates a new storage zone
 
