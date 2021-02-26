@@ -98,11 +98,19 @@ class Storage():
             Parameters
             ----------
             storage_path                : String
-                                        The path of directory in storage zone to which file is to be uploaded
+                                          The path of directory in storage zone(including the name of file as desired and excluding storage zone name) to which file is to be uploaded
             file_name                   : String
-                                        The name of the file with which it is to be selected from the local directory of the device
+                                          The name of the file as stored in local server
             local_upload_file_path      : String
-                                        The path of file as stored in local server from where we upload to BunnyCDN storage
+                                          The path of file as stored in local server(excluding file name) from where file is to be uploaded
+            
+            Examples
+            --------
+            file_name                   : 'ABC.txt'
+            local_upload_file_path      : 'C:\\User\\Sample_Directory'
+            storage_path                : '<Directory name in storage zone>/<file name as to be uploaded on storage zone>.txt' 
+                                            #Here .txt because the file being uploaded in example is txt
+            
             '''
             if local_upload_file_path==None:
                 local_upload_file_path==file_name
@@ -137,10 +145,10 @@ class Storage():
             Parameters
             ----------
             storage_path : The directory path to your file(including file name) which is to be deleted.
-                        If this is the root of your storage zone, you can ignore this parameter.
+                           If this is the root of your storage zone, you can ignore this parameter.
             '''
             #Add code below
-            assert storage_path !='',"storage_path must be specified"#to make sure storage_path is not null
+            assert storage_path !='',"storage_path must be specified" #to make sure storage_path is not null
             #to build correct url
             if storage_path[0]=='/':
                 storage_path=storage_path[1:]
@@ -168,8 +176,9 @@ class Storage():
             ----------
             storage_path : The directory path that you want to list.
             '''
-            #Add code below
-            assert storage_path !='',"storage_path must be specified"#to make sure storage_path is not null
+            
+            assert storage_path !='',"storage_path must be specified" #to make sure storage_path is not null
+            
             #to build correct url
             if storage_path[0]=='/':
                 storage_path=storage_path[1:]
@@ -177,6 +186,8 @@ class Storage():
                 url=self.base_url+storage_path+'/'
             else:
                 url=self.base_url+storage_path
+           
+            #Sending GET request
             try:
                 response=requests.get(url,headers=self.headers)
                 response.raise_for_status()
@@ -185,12 +196,14 @@ class Storage():
             else:
                 storage_list=[]
                 for dictionary in response.json():
-                    z={}
+                    temp_dict={}
                     for key in dictionary:
                         if key == 'ObjectName' and dictionary['IsDirectory']==False:
-                            z['File_Name']=dictionary[key]
+                            temp_dict['File_Name']=dictionary[key]
                         if key == 'ObjectName' and dictionary['IsDirectory']:
-                            z['Folder_Name']=dictionary[key]
-                    storage_list.append(z)
+                            temp_dict['Folder_Name']=dictionary[key]
+                    storage_list.append(temp_dict)
+              
                 print('A List of Objects')
+                
                 return storage_list
