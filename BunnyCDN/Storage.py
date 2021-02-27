@@ -113,7 +113,7 @@ class Storage():
             
             '''
             if local_upload_file_path==None:
-                local_upload_file_path==file_name
+                local_upload_file_path=file_name
             else:
                 local_upload_file_path=local_upload_file_path+'\\'+file_name
 
@@ -168,7 +168,7 @@ class Storage():
 
    
 
-    def Get_Storaged_Objects_List(self,storage_path=''):
+    def GetStoragedObjectsList(self,storage_path=''):
             '''
             This functions returns a list of files and directories located in given storage_path.
 
