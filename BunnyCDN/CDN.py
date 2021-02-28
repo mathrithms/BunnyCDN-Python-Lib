@@ -252,7 +252,7 @@ class CDN:
                                         1.Matches regex pattern: ^[a-zA-Z0-9]+$
                                         2.Length of string must be less than,
                                           or equal to 2
-                                        3.Length of string must be 
+                                        3.Length of string must be
                                           greater than, or equal to 2
 
         ReplicationsRegions      : array
