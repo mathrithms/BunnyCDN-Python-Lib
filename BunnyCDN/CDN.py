@@ -24,7 +24,8 @@ class CDN:
 
     def _Geturl(self, Task_name):
         """
-        This function is helper for the other methods in code to create appropriate url.
+        This function is helper for the other methods in code
+        to create appropriate url.
 
         """
         if Task_name[0] == "/":
@@ -38,14 +39,19 @@ class CDN:
             url = self.base_url + Task_name
         return url
 
-    def AddCertificate(self, PullZoneId, Hostname, Certificate, CertificateKey):
+    def AddCertificate(self,
+                       PullZoneId,
+                       Hostname,
+                       Certificate,
+                       CertificateKey):
         """
         This function adds custom certificate to the given pullzone
 
         Parameters
         ----------
         PullZoneId          : int64
-                              The ID of the Pull Zone to which the certificate will be added.
+                              The ID of the Pull Zone to which the certificate
+                              will be added.
 
         Hostname            : string
                               The hostname to which the certificate belongs to.
@@ -75,53 +81,69 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
                 "HTTP": response.status_code,
-                "msg": f"Certificated Added successfully to PullZoneId:{PullZoneId},Hostname:{Hostname}",
+                "msg": f"Certificated Added successfully Hostname:{Hostname}",
             }
 
     def AddBlockedIp(self, PullZoneId, BlockedIp):
         """
-        This method adds an IP to the list of blocked IPs that are not allowed to access the zone.
+        This method adds an IP to the list of blocked IPs that are not
+        allowed to access the zone.
 
         Parameters
         ----------
         PullZoneId      : int64
-                          The ID of the Pull Zone to which the IP block will be added.
+                          The ID of the Pull Zone to which the IP block
+                          will be added.
         BlockedIP       : string
                           The IP address that will be blocked
         """
-        values = json.dumps({"PullZoneId": PullZoneId, "BlockedIp": BlockedIp})
+        values = json.dumps(
+            {"PullZoneId": PullZoneId,
+             "BlockedIp": BlockedIp}
+            )
 
         try:
             response = requests.post(
-                self._Geturl("pullzone/addBlockedIp"), data=values, headers=self.headers
+                self._Geturl("pullzone/addBlockedIp"), data=values,
+                headers=self.headers
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
                 "HTTP": response.status_code,
-                "msg": f"Ip successfully added to list of blocked IPs for pullzone id: {PullZoneId}",
+                "msg": "Ip successfully added to list of blocked IPs",
             }
 
     def RemoveBlockedIp(self, PullZoneId, BlockedIp):
         """
-        This method removes mentioned IP from the list of blocked IPs that are not allowed to access the zone.
+        This method removes mentioned IP from the list of blocked IPs
+        that are not allowed to access the zone.
 
         Parameters
         ----------
         PullZoneId      : int64
-                          The ID of the Pull Zone to which the IP block will be added.
+                          The ID of the Pull Zone to which the
+                          IP block will be added.
         BlockedIP       : string
                           The IP address that will be blocked
         """
@@ -135,36 +157,45 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
                 "HTTP": response.status_code,
-                "msg": f"Ip successfully removed from list of blocked IPs for pullzone id: {PullZoneId}",
+                "msg": "Ip removed from blocked IPs list "
             }
 
     def StorageZoneData(self):
         """
-        This function returns a list of details of each storage zones in user's account
+        This function returns a list of details of each storage zones
+        in user's account
 
         """
         try:
-            response = requests.get(self._Geturl("storagezone"), headers=self.headers)
+            response = requests.get(self._Geturl("storagezone"),
+                                    headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
-
             storage_summary = []
             for storagezone in response.json():
                 storage_zone_details = {}
                 storage_zone_details["Id"] = storagezone["Id"]
                 storage_zone_details["Storage_Zone_Name"] = storagezone["Name"]
-                storage_zone_details["Storage_used"] = storagezone["StorageUsed"]
+                storage_zone_details["Usage"] = storagezone["StorageUsed"]
                 hostnames = []
                 pullzone = []
                 for data in storagezone["PullZones"]:
@@ -178,24 +209,30 @@ class CDN:
 
     def StorageZoneList(self):
         """
-        This function returns list of dictionaries containing storage zone name and storage zone id
+        Returns list of dictionaries containing storage zone
+        name and storage zone id
         """
         try:
-            response = requests.get(self._Geturl("storagezone"), headers=self.headers)
+            response = requests.get(self._Geturl("storagezone"),
+                                    headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
-
             storage_list = []
             for storagezone in response.json():
                 storage_list.append({storagezone["Name"]: storagezone["Id"]})
             return storage_list
 
     def AddStorageZone(
-        self, storage_zone_name, storage_zone_region="DE", ReplicationRegions=["DE"]
+        self, storage_zone_name, storage_zone_region="DE",
+        ReplicationRegions=["DE"]
     ):
         """
         This method creates a new storage zone
@@ -205,17 +242,22 @@ class CDN:
         storage_zone_name        : string
                                    The name of the storage zone
                                         1.Matches regex pattern: ^[a-zA-Z0-9]+$
-                                        2.Length of string must be less than, or equal to 20
-                                        3.Length of string must be greater than, or equal to 3
+                                        2.Length of string must be less than,
+                                          or equal to 20
+                                        3.Length of string must be
+                                          greater than, or equal to 3
 
         storage_zone_region      : string
         (optional)                 The main region code of storage zone
                                         1.Matches regex pattern: ^[a-zA-Z0-9]+$
-                                        2.Length of string must be less than, or equal to 2
-                                        3.Length of string must be greater than, or equal to 2
+                                        2.Length of string must be less than,
+                                          or equal to 2
+                                        3.Length of string must be 
+                                          greater than, or equal to 2
 
         ReplicationsRegions      : array
-        (optional)                 The list of active replication regions for the zone
+        (optional)                 The list of active replication regions
+                                   for the zone
 
         """
         values = json.dumps(
@@ -231,9 +273,13 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
@@ -244,7 +290,8 @@ class CDN:
     def GetStorageZone(self, storage_zone_id):
 
         """
-        This function returns details about the storage zone whose id is mentioned
+        This function returns details about the storage zone
+        whose id is mentioned
 
         Parameters
         ----------
@@ -254,13 +301,18 @@ class CDN:
         """
         try:
             response = requests.get(
-                self._Geturl(f"storagezone/{storage_zone_id}"), headers=self.headers
+                self._Geturl(f"storagezone/{storage_zone_id}"),
+                headers=self.headers
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return response.json()
 
@@ -275,13 +327,18 @@ class CDN:
         """
         try:
             response = requests.delete(
-                self._Geturl(f"storagezone/{storage_zone_id}"), headers=self.headers
+                self._Geturl(f"storagezone/{storage_zone_id}"),
+                headers=self.headers
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "Success",
@@ -296,17 +353,23 @@ class CDN:
         Parameters
         ----------
         url : string
-              The URL of the file that will be purged. Use a CDN enabled URL such as http://myzone.b-cdn.net/style.css
+              The URL of the file that will be purged.
+              Use a CDN enabled URL such as http://myzone.b-cdn.net/style.css
         """
         try:
             response = requests.post(
-                self._Geturl("purge"), params={"url": url}, headers=self.headers
+                self._Geturl("purge"), params={"url": url},
+                headers=self.headers
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "Success",
@@ -320,12 +383,17 @@ class CDN:
 
         """
         try:
-            response = requests.get(self._Geturl("billing"), headers=self.headers)
+            response = requests.get(self._Geturl("billing"),
+                                    headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return response.json()
 
@@ -346,9 +414,13 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
@@ -365,22 +437,27 @@ class CDN:
         loadErrors=True,
     ):
         """
-        This method returns the statistics associated with your account as json object
+        This method returns the statistics associated
+        with your account as json object
 
         Parameters
         ----------
 
         dateFrom        : string
-        (optional)        The start date of the range the statistics should be returned for. Format: yyyy-mm-dd
+        (optional)        The start date of the range the statistics
+                          should be returned for. Format: yyyy-mm-dd
 
         dateTo          : string
-        (optional)        The end date of the range the statistics should be returned for. Format: yyyy-MM-dd
+        (optional)        The end date of the range the statistics
+                          should be returned for. Format: yyyy-MM-dd
 
         pullZone        : int64
-        (optional)        The ID of the Pull Zone for which the statistics should be returned
+        (optional)        The ID of the Pull Zone for which the
+                          statistics should be returned
 
         serverZoneId    : int64
-        (optional)        The server zone for which the data should be returned.
+        (optional)        The server zone for which the data
+                          should be returned.
 
         loadErrors      : boolean
         (optional)        Set to true by default
@@ -400,9 +477,13 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return response.json()
 
@@ -415,12 +496,17 @@ class CDN:
         None
         """
         try:
-            response = requests.get(self._Geturl("pullzone"), headers=self.headers)
+            response = requests.get(self._Geturl("pullzone"),
+                                    headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             pullzone_list = []
             for pullzone in response.json():
@@ -437,18 +523,25 @@ class CDN:
 
         Type                : string
                               number
-                              The pricing type of the pull zone you wish to add. 0 = Standard, 1 = High Volume
+                              The pricing type of the pull zone to be added.
+                              0 = Standard, 1 = High Volume
 
         OriginURL           : string
-                              The origin URL where the pull zone files are pulled from.
+                              The origin URL where the pull zone files
+                              are pulled from.
 
         StorageZoneId       : int64
-                              The ID(number) of the storage zone to which the pull zone will be linked (Optional)
+                              The ID(number) of the storage zone to which
+                              the pull zone will be linked (Optional)
 
         """
 
-        if StorageZoneId == None:
-            values = json.dumps({"Name": Name, "Type": Type, "OriginURL": OriginURL})
+        if StorageZoneId is None:
+            values = json.dumps(
+                {"Name": Name,
+                 "Type": Type,
+                 "OriginURL": OriginURL}
+                )
         else:
             values = {
                 "Name": Name,
@@ -462,15 +555,20 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return response.json()
 
     def GetPullZone(self, PullZoneID):
         """
-        This function returns the pullzone details for the zone with the given ID
+        This function returns the pullzone details
+        for the zone with the given ID
 
         Parameters
         ----------
@@ -483,11 +581,15 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
-            return {response.json()}
+            return response.json()
 
     def UpdatePullZone(
         self,
@@ -502,11 +604,11 @@ class CDN:
         EnableGeoZoneSA,
         EnableGeoZoneAF,
         ZoneSecurityEnabled,
-        ZoneSecurityIncludeHashRemoteIP,
+        IncludeHashRemoteIP,
         IgnoreQueryStrings,
         MonthlyBandwidthLimit,
-        AccessControlOriginHeaderExtensions,
-        EnableAccessControlOriginHeader,
+        OriginHeaderExtensions,
+        EnableOriginHeader,
         BlockRootPathAccess,
         EnableWebpVary,
         EnableHostnameVary,
@@ -540,7 +642,8 @@ class CDN:
         Parameters
         ----------
         PullZoneID                    : int64
-                                        The ID (number) of the pullzone to update
+                                        The ID (number) of the
+                                        pullzone to update
 
         OriginUrl                     : string
                                         The origin URL of the pull zone
@@ -550,121 +653,169 @@ class CDN:
         BlockedIps                    : array
 
         EnableCacheSlice              : boolean
-                                        If enabled, the cached data will be stored in small chunks and allow the server to process byte range requests even for uncached files.
+                                        If enabled, the cached data will be
+                                        stored in small chunks and allow the
+                                        server to process byte range requests
+                                        even for uncached files.
 
         EnableGeoZoneUS               : boolean
-                                        If enabled, the zone will serve data through our United States PoPs.
+                                        If enabled, the zone will serve data
+                                        through our United States PoPs.
 
         EnableGeoZoneEU               : boolean
-                                        If enabled, the zone will serve data through our European PoPs.
+                                        If enabled, the zone will serve data
+                                        through our European PoPs.
 
         EnableGeoZoneASIA             : boolean
-                                        If enabled, the zone will serve data through our Asian and Oceanian PoPs.
+                                        If enabled, the zone will serve data
+                                        through our Asian and Oceanian PoPs.
 
         EnableGeoZoneSA               : boolean
-                                        If enabled, the zone will serve data through our South American PoPs.
+                                        If enabled, the zone will serve data
+                                        through our South American PoPs.
 
         EnableGeoZoneAF               : boolean
-                                        If enabled, the zone will serve data through our African PoPs.
+                                        If enabled, the zone will serve data
+                                        through our African PoPs.
 
         ZoneSecurityEnabled           : boolean
-                                        If enabled, the zone will be secured using token authentication.
+                                        If enabled, the zone will be secured
+                                        using token authentication.
 
-        ZoneSecurityIncludeHashRemoteIP : boolean
-                                        If enabled, the zone token authentication hash will include the remote IP.
+        IncludeHashRemoteIP : boolean
+                                          If enabled, the zone token
+                                          authentication hash will
+                                          include the remote IP.
 
         IgnoreQueryStrings            : boolean
-                                        If enabled, the URLs will ignore any kind of query strings when looking for and storing cached files
+                                        If enabled, the URLs will ignore any
+                                        kind of query strings when looking
+                                        for and storing cached files
 
         MonthlyBandwidthLimit         : number
-                                        Set the monthly pull zone bandwidth limit in bytes.
+                                        Set the monthly pull zone
+                                        bandwidth limit in bytes.
 
-        AccessControlOriginHeaderExtensions : array
+        OriginHeaderExtensions        : array
 
-        EnableAccessControlOriginHeader : boolean
-                                        If enabled the CORS headers will be returned with the requests to CORS enabled extensions.
+        EnableOriginHeader            : boolean
+                                        If enabled the CORS headers will be
+                                        returned with the requests to CORS
+                                        enabled extensions.
 
         BlockRootPathAccess           : boolean
-                                        Set to true if you want to block all requests going to root directories instead of files.
+                                        Set to true if you want to block all
+                                        requests going to root directories
+                                        instead of files.
 
         EnableWebpVary                : boolean
-                                        If enabled, the zone will dynamically vary the cached based on WebP support
+                                        If enabled, the zone will dynamically
+                                        vary the cached based on WebP support
 
         EnableHostnameVary            : boolean
-                                        Set to true if the cache files should vary based on the request hostname
+                                        Set to true if the cache files should
+                                        vary based on the request hostname
 
         EnableCountryCodeVary         : boolean
-                                        Set to true if the cache files should vary based on the country code
+                                        Set to true if the cache files should
+                                        vary based on the country code
 
         EnableLogging                 : boolean
-                                        Set to true if the logging for the zone should be enabled
+                                        Set to true if the logging for the
+                                        zone should be enabled
 
         DisableCookies                : boolean
-                                        If true, the cookies are disabled for the pull zone
+                                        If true, the cookies are disabled
+                                        for the pull zone
 
         BudgetRedirectedCountries     : array
 
         BlockedCountries              : array
 
         EnableOriginShield            : boolean
-                                        Set to true to enable the origin shield for this zone
+                                        Set to true to enable the origin
+                                        shield for this zone
 
         EnableQueryStringOrdering     : boolean
-                                        Set to true to enable query string sorting when caching files
+                                        Set to true to enable query string
+                                        sorting when caching files
 
         CacheErrorResponses           : boolean
-                                        Set to true to temporary cache error responses from the origins erver
+                                        Set to true to temporary cache error
+                                        responses from the origins erver
 
         OriginShieldZoneCode          : string
-                                        The zone code of the origin shield location
+                                        The zone code of the origin
+                                        shield location
 
         AddCanonicalHeader            : boolean
-                                        True if the zone should return an automatically generated canonical header
+                                        True if the zone should return an
+                                        automatically generated canonical
+                                        header
 
         CacheControlMaxAgeOverride    : number
-                                        Set the cache control override, set to 0 to respect the origin headers
+                                        Set the cache control override,
+                                        set to 0 to respect the origin headers
 
         CacheControlBrowserMaxAgeOverride : number
-                                            Set the browser cache control override, set to -1 for this to match the internal cache-control
+                                            Set the browser cache control
+                                            override,set to -1 for this
+                                            to match the internal cache-control
 
         AddHostHeader                 : boolean
-                                        If enabled, the original host header of the request will be forwarded to the origin server.
+                                        If enabled, the original host header
+                                        of the request will be forwarded to
+                                        the origin server.
 
         AWSSigningEnabled             : boolean
-                                        If enabled, this will send Amazon S3 authentication headers back to the origin.
+                                        If enabled, this will send Amazon S3
+                                        authentication headers back to
+                                        the origin.
 
         AWSSigningKey                 : string
-                                        The Amazon S3 signing key used to sign origin requests
+                                        The Amazon S3 signing key used
+                                        to sign origin requests
 
         AWSSigningRegionName          : string
-                                        The Amazon S3 region name used to sign origin requests
+                                        The Amazon S3 region name used
+                                        to sign origin requests
 
         AWSSigningSecret              : string
-                                        The Amazon S3 secret used to sign origin requests
+                                        The Amazon S3 secret used to
+                                        sign origin requests
 
         EnableTLS1                    : boolean
-                                        True if the zone should allow legacy TLS 1 connections
+                                        True if the zone should allow legacy
+                                        TLS 1 connections
 
         EnableTLS1_1                  : boolean
-                                        True if the zone should allow legacy TLS 1.1 connections
+                                        True if the zone should allow legacy
+                                        TLS 1.1 connections
 
         LoggingSaveToStorage          : boolean
-                                        True to enable permanent log storage. This must be sent together with a valid LoggingStorageZoneId property.
+                                        True to enable permanent log storage.
+                                        This must be sent together with a
+                                        valid LoggingStorageZoneId property.
 
         LoggingStorageZoneId          : number
-                                        The ID of the permanent log storage zone.
+                                        The ID of the permanent log
+                                        storage zone.
 
         LogForwardingEnabled          : boolean
-                                        True if the log forwarding feature should be enabled.
+                                        True if the log forwarding feature
+                                        should be enabled.
 
         LogForwardingHostname         : string
-                                        The hostname of the log forwarding endpoint.
+                                        The hostname of the log forwarding
+                                        endpoint.
 
         LogForwardingPort             : number
-                                        The port of the log forwarding endpoint.
+                                        The port of the log forwarding
+                                        endpoint.
 
         LogForwardingToken            : string
-                                        The authentication token for the log forwarding endpoint.
+                                        The authentication token for the log
+                                        forwarding endpoint.
 
         """
         values = json.dumps(
@@ -680,11 +831,11 @@ class CDN:
                 "EnableGeoZoneSA": EnableGeoZoneSA,
                 "EnableGeoZoneAF": EnableGeoZoneAF,
                 "ZoneSecurityEnabled": ZoneSecurityEnabled,
-                "ZoneSecurityIncludeHashRemoteIP": ZoneSecurityIncludeHashRemoteIP,
+                "ZoneSecurityIncludeHashRemoteIP": IncludeHashRemoteIP,
                 "IgnoreQueryStrings": IgnoreQueryStrings,
                 "MonthlyBandwidthLimit": MonthlyBandwidthLimit,
-                "AccessControlOriginHeaderExtensions": AccessControlOriginHeaderExtensions,
-                "EnableAccessControlOriginHeader": EnableAccessControlOriginHeader,
+                "AccessControlOriginHeaderExtensions": OriginHeaderExtensions,
+                "EnableAccessControlOriginHeader": EnableOriginHeader,
                 "BlockRootPathAccess": BlockRootPathAccess,
                 "EnableWebpVary": EnableWebpVary,
                 "EnableHostnameVary": EnableHostnameVary,
@@ -715,13 +866,19 @@ class CDN:
         )
         try:
             response = requests.post(
-                self._Geturl(f"pullzone/{PullZoneID}"), headers=self.headers
+                self._Geturl(f"pullzone/{PullZoneID}"),
+                data=values,
+                headers=self.headers
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
@@ -745,9 +902,13 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
@@ -762,17 +923,23 @@ class CDN:
         Parameters
         ----------
         PullZoneID            : int64
-                                The ID (number) of the pullzone who's cache is to be Purged
+                                The ID (number) of the pullzone
+                                who's cache is to be Purged
         """
         try:
             response = requests.post(
-                self._Geturl(f"pullzone/{PullZoneID}/purgeCache"), headers=self.headers
+                self._Geturl(f"pullzone/{PullZoneID}/purgeCache"),
+                headers=self.headers
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
@@ -799,10 +966,13 @@ class CDN:
         Parameters
         ----------
         PullZoneID              :int64
-                                 The Id(number) of the pullzone whose edgerule is to be updated or where new edgerule has to be added
+                                 The Id(number) of the pullzone whose edgerule
+                                 is to be updated or where new edgerule has to
+                                 be added
 
         GUID                    :number
-                                 Guid of the edgerule (exclude when adding a new edgerule)
+                                 Guid of the edgerule
+                                 (exclude when adding a new edgerule)
 
         ActionParameter1        :string
                                  The action parameter 1 of the edge rule
@@ -817,7 +987,13 @@ class CDN:
                                  The description of the Edge rule
 
         ActionType              :number
-                                 The action type of the edge rule. The possible values are: ForceSSL = 0 Redirect = 1 OriginUrl = 2 OverrideCacheTime = 3 BlockRequest = 4 SetResponseHeader = 5 SetRequestHeader = 6 ForceDownload = 7 DisableTokenAuthentication = 8 EnableTokenAuthentication = 9
+                                 The action type of the edge rule.
+                                 The possible values are: ForceSSL = 0
+                                 Redirect = 1,OriginUrl = 2
+                                 OverrideCacheTime = 3,BlockRequest = 4,
+                                 SetResponseHeader = 5,SetRequestHeader = 6,
+                                 ForceDownload =7,DisableTokenAuthentication=8,
+                                 EnableTokenAuthentication = 9
 
         TriggerMatchingType     :number
                                  Trigger matching type
@@ -825,7 +1001,7 @@ class CDN:
         Triggers                :array
 
         """
-        if GUID == None:
+        if GUID is None:
             values = json.dumps(
                 {
                     "ActionParameter1": ActionParameter1,
@@ -839,15 +1015,19 @@ class CDN:
             )
             try:
                 response = requests.post(
-                    self._Geturl(f"pullzone/{PullZoneID}/edgerules/addOrUpdate"),
-                    data=values,
-                    headers=self.headers,
+                  self._Geturl(f"pullzone/{PullZoneID}/edgerules/addOrUpdate"),
+                  data=values,
+                  headers=self.headers,
                 )
                 response.raise_for_status()
             except HTTPError as http:
-                return {"status": "error", "HTTP": response.status_code, "msg": http}
+                return {"status": "error",
+                        "HTTP": response.status_code,
+                        "msg": http}
             except Exception as err:
-                return {"status": "error", "HTTP": response.status_code, "msg": err}
+                return {"status": "error",
+                        "HTTP": response.status_code,
+                        "msg": err}
             else:
                 return {
                     "status": "success",
@@ -870,15 +1050,19 @@ class CDN:
 
             try:
                 response = requests.post(
-                    self._Geturl(f"pullzone/{PullZoneID}/edgerules/addOrUpdate"),
-                    data=values,
-                    headers=self.headers,
+                  self._Geturl(f"pullzone/{PullZoneID}/edgerules/addOrUpdate"),
+                  data=values,
+                  headers=self.headers,
                 )
                 response.raise_for_status()
             except HTTPError as http:
-                return {"status": "error", "HTTP": response.status_code, "msg": http}
+                return {"status": "error",
+                        "HTTP": response.status_code,
+                        "msg": http}
             except Exception as err:
-                return {"status": "error", "HTTP": response.status_code, "msg": err}
+                return {"status": "error",
+                        "HTTP": response.status_code,
+                        "msg": err}
             else:
                 return {
                     "status": "success",
@@ -906,9 +1090,13 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
@@ -923,7 +1111,8 @@ class CDN:
         Parameters
         ----------
         PullZoneID:         : int64
-                              ID of the pullzone to which hostname will be added
+                              ID of the pullzone to which hostname
+                              will be added
 
         Hostname:           : string
                               The hostname that will be registered
@@ -933,13 +1122,19 @@ class CDN:
 
         try:
             response = requests.post(
-                self._Geturl("pullzone/addHostname"), data=values, headers=self.headers
+                self._Geturl("pullzone/addHostname"),
+                data=values,
+                headers=self.headers
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
@@ -955,7 +1150,8 @@ class CDN:
         Parameters
         ----------
         PullZoneID:         :number
-                             ID of the pullzone of which custom hostname will be delted
+                             ID of the pullzone of which custom hostname
+                             will be delted
 
         Hostname:           :string
                              The hostname that will be deleted
@@ -970,9 +1166,13 @@ class CDN:
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
@@ -982,32 +1182,43 @@ class CDN:
 
     def SetForceSSL(self, PullZoneID, Hostname, ForceSSL):
         """
-        This function is used to enable or disable the ForceSSL setting for a pulzone
+        This function is used to enable or disable the ForceSSL
+        setting for a pulzone
 
         Parameters
         ----------
         PullZoneID          :number
-                             The id of the pull zone that the hostname belongs to
+                             The id of the pull zone that the hostname
+                             belongs to
 
         Hostname            :string
                              The hostname that will be updated
 
         ForceSSL            :boolean
-                             If enabled, the zone will force redirect to the SSL version of the URLs
+                             If enabled, the zone will force redirect
+                             to the SSL version of the URLs
 
         """
         values = json.dumps(
-            {"PullZoneID": PullZoneID, "Hostname": Hostname, "ForceSSL": ForceSSL}
+            {"PullZoneID": PullZoneID,
+             "Hostname": Hostname,
+             "ForceSSL": ForceSSL}
         )
         try:
             response = requests.post(
-                self._Geturl("pullzone/setForceSSL"), data=values, headers=self.headers
+                self._Geturl("pullzone/setForceSSL"),
+                data=values,
+                headers=self.headers
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return {
                 "status": "success",
@@ -1017,23 +1228,29 @@ class CDN:
 
     def LoadFreeCertificate(self, Hostname):
         """
-        This function Loads a FREE SSL Certificate to the domain provided by Let's Encrypt
+        This function Loads a FREE SSL Certificate to the domain
+        provided by Let's Encrypt
 
         Parameters
         ----------
         Hostname            : string
-                              Hostname that the ForceSSL certificate will be loaded for
+                              Hostname that the ForceSSL certificate
+                              will be loaded for
 
         """
         try:
             response = requests.get(
-                self._Geturl(f"pullzone/loadFreeCertificate?hostname={Hostname}"),
-                headers=self.headers,
+             self._Geturl(f"pullzone/loadFreeCertificate?hostname={Hostname}"),
+             headers=self.headers,
             )
             response.raise_for_status()
         except HTTPError as http:
-            return {"status": "error", "HTTP": response.status_code, "msg": http}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
         except Exception as err:
-            return {"status": "error", "HTTP": response.status_code, "msg": err}
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
             return self.GetPullZoneList()
