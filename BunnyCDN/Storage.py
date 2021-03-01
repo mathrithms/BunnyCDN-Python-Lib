@@ -34,15 +34,11 @@ class Storage:
         }
 
         # applying constraint that storage_zone must be specified
-        assert (
-            storage_zone != ""
-        ), "storage_zone is not specified/missing"
+        assert storage_zone != "", "storage_zone is not specified/missing"
 
         # For generating base_url for sending requests
         if storage_zone_region == "de" or storage_zone_region == "":
-            self.base_url = (
-                             "https://storage.bunnycdn.com/" + storage_zone
-                             + "/")
+            self.base_url = "https://storage.bunnycdn.com/" + storage_zone + "/"
         else:
             self.base_url = (
                 "https://"
@@ -83,10 +79,17 @@ class Storage:
             response = requests.get(url, headers=self.headers, stream=True)
             response.raise_for_status()
         except HTTPError as http:
-            return {'status': 'error', 'HTTP': response.status_code, 'msg': f'Http error occured {http}'}
-
+            return {
+                "status": "error",
+                "HTTP": response.status_code,
+                "msg": f"Http error occured {http}",
+            }
         except Exception as err:
-            return{'status': 'error', 'HTTP': response.status_code, 'msg': f'error occured {err}'}
+            return {
+                "status": "error",
+                "HTTP": response.status_code,
+                "msg": f"error occured {err}",
+            }
         else:
             download_path = os.path.join(download_path, file_name)
             # Downloading file
@@ -95,11 +98,18 @@ class Storage:
                 for chunk in response.iter_content(chunk_size=1024):
                     if chunk:
                         file.write(chunk)
-                return {'status': 'success',
-                        'HTTP': response.status_code,
-                        'msg': "File downloaded Successfully"}
+                return {
+                    "status": "success",
+                    "HTTP": response.status_code,
+                    "msg": "File downloaded Successfully",
+                }
 
-    def PutFile(self, file_name, storage_path=None, local_upload_file_path=os.getcwd(),):
+    def PutFile(
+        self,
+        file_name,
+        storage_path=None,
+        local_upload_file_path=os.getcwd(),
+    ):
 
         """
         This function uploads files to your BunnyCDN storage zone
@@ -121,28 +131,34 @@ class Storage:
         storage_path                : '<Directory name in storage zone>/<file name as to be uploaded on storage zone>.txt'
                                         #Here .txt because the file being uploaded in example is txt
         """
-        local_upload_file_path = os.path.join(local_upload_file_path,
-                                              file_name)
+        local_upload_file_path = os.path.join(local_upload_file_path, file_name)
 
         # to build correct url
-        if storage_path is not None and storage_path != '':
+        if storage_path is not None and storage_path != "":
             if storage_path[0] == "/":
                 storage_path = storage_path[1:]
             if storage_path[-1] == "/":
                 storage_path = storage_path[:-1]
-            url = self.base_url+storage_path
+            url = self.base_url + storage_path
         else:
             url = self.base_url + file_name
-
         with open(local_upload_file_path, "rb") as file:
             file_data = file.read()
         response = requests.put(url, data=file_data, headers=self.headers)
         try:
             response.raise_for_status()
         except HTTPError as http:
-            return{'status': 'error', 'HTTP': response.status_code, 'msg': f"Upload Failed HTTP Error Occured: {http}"}
+            return {
+                "status": "error",
+                "HTTP": response.status_code,
+                "msg": f"Upload Failed HTTP Error Occured: {http}",
+            }
         else:
-            return {'status': 'success', 'HTTP': response.status_code, 'msg': "The File Upload was Successful"}
+            return {
+                "status": "success",
+                "HTTP": response.status_code,
+                "msg": "The File Upload was Successful",
+            }
 
     def DeleteFile(self, storage_path=""):
         """
@@ -161,7 +177,6 @@ class Storage:
             storage_path = storage_path[1:]
         if storage_path[-1] == "/":
             storage_path = storage_path[:-1]
-
         url = self.base_url + storage_path
 
         try:
@@ -169,14 +184,22 @@ class Storage:
             response.raise_for_status
         except HTTPError as http:
             return {
-                'status': 'error',
-                    'HTTP': response.raise_for_status(),
-                    'msg': f"HTTP Error occured: {http}"
+                "status": "error",
+                "HTTP": response.raise_for_status(),
+                "msg": f"HTTP Error occured: {http}",
             }
         except Exception as err:
-            return{'status': 'error', 'HTTP': response.status_code, 'msg' : f'Object Delete failed ,Error occured:{err}'}
+            return {
+                "status": "error",
+                "HTTP": response.status_code,
+                "msg": f"Object Delete failed ,Error occured:{err}",
+            }
         else:
-            return{'status': 'success', 'HTTP': response.status_code, 'msg': "Object Successfully Deleted"}
+            return {
+                "status": "success",
+                "HTTP": response.status_code,
+                "msg": "Object Successfully Deleted",
+            }
 
     def GetStoragedObjectsList(self, storage_path=None):
         """
@@ -193,13 +216,16 @@ class Storage:
                 url = self.base_url + storage_path + "/"
         else:
             url = self.base_url
-
         # Sending GET request
         try:
             response = requests.get(url, headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            return{'status': 'error', 'HTTP': response.status_code, 'msg' : f"http error occured {http}"}
+            return {
+                "status": "error",
+                "HTTP": response.status_code,
+                "msg": f"http error occured {http}",
+            }
         else:
             storage_list = []
             for dictionary in response.json():
@@ -210,5 +236,4 @@ class Storage:
                     if key == "ObjectName" and dictionary["IsDirectory"]:
                         temp_dict["Folder_Name"] = dictionary[key]
                 storage_list.append(temp_dict)
-
             return storage_list
