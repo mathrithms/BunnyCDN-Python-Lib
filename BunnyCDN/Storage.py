@@ -1,4 +1,5 @@
 """This code is to use the BunnyCDN Storage API"""
+
 import os
 import requests
 from requests.exceptions import HTTPError
@@ -171,7 +172,8 @@ class Storage:
                 'status': 'error',
                     'HTTP': response.raise_for_status(),
                     'msg': f"HTTP Error occured: {http}"
-        except Exception as err
+            }
+        except Exception as err:
             return{'status': 'error', 'HTTP': response.status_code, 'msg' : f'Object Delete failed ,Error occured:{err}'}
         else:
             return{'status': 'success', 'HTTP': response.status_code, 'msg': "Object Successfully Deleted"}
