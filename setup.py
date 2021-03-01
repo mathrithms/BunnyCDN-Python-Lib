@@ -6,8 +6,8 @@ setup(
     author_email="hello@mathrithms.com",
     description="A python SDK for BunnyCDN",
     url="https://github.com/mathrithms/BunnyCDN-Python-Lib.git",
-    packages=find_packages()
-    install_requires=['requests']
+    packages=find_packages(),
+    install_requires=['requests'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
