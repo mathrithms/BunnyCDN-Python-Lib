@@ -490,7 +490,6 @@ class CDN:
     def GetPullZoneList(self):
         """
         This function fetches the list of pullzones in the User's Account
-
         Parameters
         ----------
         None
@@ -520,7 +519,6 @@ class CDN:
         ----------
         Name                : string
                               The name of the new pull zone
-
         Type                : string
                               number
                               The pricing type of the pull zone to be added.
@@ -638,20 +636,19 @@ class CDN:
     ):
         """
         This function updates the pullzone with the given ID
-
         Parameters
         ----------
         PullZoneID                    : int64
                                         The ID (number) of the
                                         pullzone to update
 
+
         OriginUrl                     : string
                                         The origin URL of the pull zone
-
         AllowedReferrers              : array
-
+        
         BlockedIps                    : array
-
+        
         EnableCacheSlice              : boolean
                                         If enabled, the cached data will be
                                         stored in small chunks and allow the
@@ -731,7 +728,7 @@ class CDN:
         BudgetRedirectedCountries     : array
 
         BlockedCountries              : array
-
+        
         EnableOriginShield            : boolean
                                         Set to true to enable the origin
                                         shield for this zone
@@ -864,6 +861,7 @@ class CDN:
                 "LogForwardingToken": LogForwardingToken,
             }
         )
+
         try:
             response = requests.post(
                 self._Geturl(f"pullzone/{PullZoneID}"),
@@ -889,7 +887,6 @@ class CDN:
     def DeletePullZone(self, PullZoneID):
         """
         This function updates the pullzone with the given ID
-
         Parameters
         ----------
         PullZoneID            : int64
@@ -919,7 +916,6 @@ class CDN:
     def PurgePullZoneCache(self, PullZoneID):
         """
         This function purges the full cache of given pullzone
-
         Parameters
         ----------
         PullZoneID            : int64
@@ -962,10 +958,10 @@ class CDN:
 
         """
         This function Adds or Updates the Edgerule
-
         Parameters
         ----------
         PullZoneID              :int64
+
                                  The Id(number) of the pullzone whose edgerule
                                  is to be updated or where new edgerule has to
                                  be added
@@ -974,18 +970,15 @@ class CDN:
                                  Guid of the edgerule
                                  (exclude when adding a new edgerule)
 
+
         ActionParameter1        :string
                                  The action parameter 1 of the edge rule
-
         ActionParameter2        :string
                                  The action parameter 2 of the edge rule
-
         Enabled                 :boolean
                                  The boolean
-
         Description             :string
                                  The description of the Edge rule
-
         ActionType              :number
                                  The action type of the edge rule.
                                  The possible values are: ForceSSL = 0
@@ -997,7 +990,6 @@ class CDN:
 
         TriggerMatchingType     :number
                                  Trigger matching type
-
         Triggers                :array
 
         """
@@ -1013,6 +1005,7 @@ class CDN:
                     "Triggers": Triggers,
                 }
             )
+
             try:
                 response = requests.post(
                   self._Geturl(f"pullzone/{PullZoneID}/edgerules/addOrUpdate"),
@@ -1073,7 +1066,6 @@ class CDN:
     def DeleteEdgeRule(self, PullZoneID, EdgeRuleID):
         """
         This function deletes the edgerule
-
         Parameters
          ---------
         PullZoneID          :number
@@ -1083,6 +1075,7 @@ class CDN:
                              ID of the edgerule to be deleted
 
         """
+
         try:
             response = requests.delete(
                 self._Geturl(f"pullzone/{PullZoneID}/edgerules/{EdgeRuleID}"),
@@ -1107,7 +1100,6 @@ class CDN:
     def AddCustomHostname(self, PullZoneID, Hostname):
         """
         This function is used to add custom hostname to a pullzone
-
         Parameters
         ----------
         PullZoneID:         : int64
@@ -1119,6 +1111,7 @@ class CDN:
 
         """
         values = json.dumps({"PullZoneID": PullZoneID, "Hostname": Hostname})
+
 
         try:
             response = requests.post(
@@ -1146,7 +1139,6 @@ class CDN:
 
         """
         This function is used to delete custom hostname of a pullzone
-
         Parameters
         ----------
         PullZoneID:         :number
@@ -1158,6 +1150,7 @@ class CDN:
 
         """
         params = {"id": PullZoneID, "hostname": Hostname}
+
         try:
             response = requests.delete(
                 self._Geturl("pullzone/deleteHostname"),
@@ -1180,6 +1173,7 @@ class CDN:
                 "msg": "Successfully Deleted Hostname",
             }
 
+
     def SetForceSSL(self, PullZoneID, Hostname, ForceSSL):
         """
         This function is used to enable or disable the ForceSSL
@@ -1193,7 +1187,6 @@ class CDN:
 
         Hostname            :string
                              The hostname that will be updated
-
         ForceSSL            :boolean
                              If enabled, the zone will force redirect
                              to the SSL version of the URLs
@@ -1204,6 +1197,7 @@ class CDN:
              "Hostname": Hostname,
              "ForceSSL": ForceSSL}
         )
+
         try:
             response = requests.post(
                 self._Geturl("pullzone/setForceSSL"),
@@ -1238,6 +1232,7 @@ class CDN:
                               will be loaded for
 
         """
+
         try:
             response = requests.get(
              self._Geturl(f"pullzone/loadFreeCertificate?hostname={Hostname}"),
@@ -1254,3 +1249,4 @@ class CDN:
                     "msg": err}
         else:
             return self.GetPullZoneList()
+
