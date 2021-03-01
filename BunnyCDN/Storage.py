@@ -58,7 +58,8 @@ class Storage:
         Parameters
         ----------
         storage_path  : String
-                        The path of the directory(including file name and excluding storage zone name)
+                        The path of the directory
+                        (including file name and excluding storage zone name)
                         from which files are to be retrieved
         download_path : String
                         The directory on local server to which downloaded file must be saved
@@ -81,9 +82,10 @@ class Storage:
             response = requests.get(url, headers=self.headers, stream=True)
             response.raise_for_status()
         except HTTPError as http:
-            print(f"HTTP Error occured: {http}")
+            return {'status': 'error', 'HTTP': response.status_code, 'msg': http}
+
         except Exception as err:
-            print(f"Error Occured:{err}")
+            return{'status': 'error', 'HTTP': response.status_code, 'msg': http}
         else:
             download_path = os.path.join(download_path, file_name)
             # Downloading file
@@ -92,7 +94,9 @@ class Storage:
                 for chunk in response.iter_content(chunk_size=1024):
                     if chunk:
                         file.write(chunk)
-                print("File downloaded Successfully")
+                return {'status': 'success',
+                        'HTTP': response.status_code,
+                        'msg': "File downloaded Successfully"}
 
     def PutFile(self, file_name, storage_path=None, local_upload_file_path=os.getcwd(),):
 
@@ -135,10 +139,9 @@ class Storage:
         try:
             response.raise_for_status()
         except HTTPError as http:
-            print("Upload Failed")
-            print(f"HTTP Error Occured: {http}")
+            return{'status': 'error', 'HTTP': response.status_code, 'msg': f"Upload Failed HTTP Error Occured: {http}"}
         else:
-            print("The File Upload was Successful")
+            return {'status': 'success', 'HTTP': response.status_code, 'msg': "The File Upload was Successful"}
 
     def DeleteFile(self, storage_path=""):
         """
@@ -164,10 +167,14 @@ class Storage:
             response = requests.delete(url, headers=self.headers)
             response.raise_for_status
         except HTTPError as http:
-            print(f"HTTP Error occured: {http}")
-            print("Object Delete failed ")
+            return {
+                'status': 'error',
+                    'HTTP': response.raise_for_status(),
+                    'msg': f"HTTP Error occured: {http}"
+        except Exception as err
+            return{'status': 'error', 'HTTP': response.status_code, 'msg' : f'Object Delete failed ,Error occured:{err}'}
         else:
-            print("Object Successfully Deleted")
+            return{'status': 'success', 'HTTP': response.status_code, 'msg': "Object Successfully Deleted"}
 
     def GetStoragedObjectsList(self, storage_path=None):
         """
@@ -190,7 +197,7 @@ class Storage:
             response = requests.get(url, headers=self.headers)
             response.raise_for_status()
         except HTTPError as http:
-            print(f"http error occured {http}")
+            return{'status': 'error', 'HTTP': response.status_code, 'msg' : f"http error occured {http}"}
         else:
             storage_list = []
             for dictionary in response.json():
@@ -201,6 +208,5 @@ class Storage:
                     if key == "ObjectName" and dictionary["IsDirectory"]:
                         temp_dict["Folder_Name"] = dictionary[key]
                 storage_list.append(temp_dict)
-            print("A List of Objects")
 
             return storage_list
