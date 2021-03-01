@@ -83,10 +83,10 @@ class Storage:
             response = requests.get(url, headers=self.headers, stream=True)
             response.raise_for_status()
         except HTTPError as http:
-            return {'status': 'error', 'HTTP': response.status_code, 'msg': http}
+            return {'status': 'error', 'HTTP': response.status_code, 'msg': f'Http error occured {http}'}
 
         except Exception as err:
-            return{'status': 'error', 'HTTP': response.status_code, 'msg': http}
+            return{'status': 'error', 'HTTP': response.status_code, 'msg': f'error occured {http}'}
         else:
             download_path = os.path.join(download_path, file_name)
             # Downloading file
