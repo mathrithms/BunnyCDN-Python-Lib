@@ -86,7 +86,7 @@ class Storage:
             return {'status': 'error', 'HTTP': response.status_code, 'msg': f'Http error occured {http}'}
 
         except Exception as err:
-            return{'status': 'error', 'HTTP': response.status_code, 'msg': f'error occured {http}'}
+            return{'status': 'error', 'HTTP': response.status_code, 'msg': f'error occured {err}'}
         else:
             download_path = os.path.join(download_path, file_name)
             # Downloading file
