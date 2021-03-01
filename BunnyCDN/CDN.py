@@ -343,7 +343,7 @@ class CDN:
             return {
                 "status": "Success",
                 "HTTP": response.status_code,
-                "msg": response.json(),
+                "msg": "Deleted Storagezone successfully",
             }
 
     def PurgeUrlCache(self, url):
@@ -888,7 +888,7 @@ class CDN:
 
     def DeletePullZone(self, PullZoneID):
         """
-        This function updates the pullzone with the given ID
+        This function deletes the pullzone with the given ID
 
         Parameters
         ----------
