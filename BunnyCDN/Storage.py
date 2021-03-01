@@ -17,10 +17,10 @@ class Storage:
                                                   Your bunnycdn storage
                                                   Apikey/FTP password of
                                                   storage zone
-        
+
         storage_zone                            : String
                                                   Name of your storage zone
-        
+
         storage_zone_region(optional parameter) : String
                                                   The storage zone region code
                                                   as per BunnyCDN
@@ -31,7 +31,7 @@ class Storage:
             "Content-Type": "application/json",
             "Accept": "applcation/json",
         }
-        
+
         # applying constraint that storage_zone must be specified
         assert (
             storage_zone != ""
