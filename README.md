@@ -1,12 +1,12 @@
 # BunnyCDN Python Lib
 BunnyCDN is one of the fastest and most cost effective CDN.
 
-With this BunnyCDN PHP Class you can easily implement it and turbo charge your website content to deliver it at lighting speed to your visitors.
+With this BunnyCDN Python Library you can easily implement it and turbo charge your website content to deliver it at lighting speed to your visitors.
 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will let you install the bunnycdnpython python library running on your local machine.
 
 ### Prerequisites
 Programming language: Python
@@ -269,6 +269,31 @@ CDN module has functions that utilize APIs mentioned in official Bunnycdn apiary
     ```
     [{"Name":"storagezone1","Id":"storagezoneid1"},{"Name":"storagezone2","Id":"storagezoneid2"}]
     ```
+* ### Get Storage Zone Data
+    Returns list of dictionaries containing  details of storage zones in account
+    ```
+    >>obj_cdn.StorageZoneData()
+    ```
+    * Success Response
+    ```
+        [
+            {
+             'Id': 53889,
+             'Storage_Zone_Name': 'mystoragezone1',
+             'Usage': 39080459,
+             'host_names': ['test.b-cdn.net', 'cdn.samplehostname.com'],
+             'PullZones': ['mypullzone1']
+             },
+         
+            {
+             'Id': 54559,
+             'Storage_Zone_Name': 'mystoragezone2',
+             'Usage': 0,
+             'host_names': [],
+             'PullZones': ['mypullzone2']
+             }
+        ]
+    ```
 * ### Add Storagezone
     This function creates an new storage zone
     ```
@@ -320,7 +345,72 @@ CDN module has functions that utilize APIs mentioned in official Bunnycdn apiary
                 "msg": "Deleted Storagezone successfully",
             }
     ```
+* ### Get Video Library
+    Gets the details of Video Library of the specified id
+    ```
+    >>obj_cdn.GetVideoLibrary(id)
+    ```
+    * Success Response
+    ```
+                 {
+                     "status": "success",
+                      "HTTP": 200,
+                      "msg": {
+                                "Id": 1234,
+                                "Name": "My Video Library",
+                                "VideoCount": 24,
+                                "DateCreated": "2021-04-22T00:00:00Z",
+                                "ApiKey": "video-library-api-key",
+                                "ReadOnlyApiKey": "video-library-readonly-api-key",
+                                "HasWatermark": false,
+                                "WatermarkPositionLeft": 70,
+                                "WatermarkPositionTop": 70,
+                                "WatermarkWidth": 12,
+                                "WatermarkHeight": 12,
+                                "EnabledResolutions": "240p,360p,480p",
+                                "VastTagUrl": "https://mydomain.com/vasttag.xml",
+                                "ViAiPublisherId": "vai-publisher-id",
+                                "CaptionsFontSize": "14,",
+                                "CaptionsFontColor": "#fff",
+                                "CaptionsBackground": "#222",
+                                "UILanguage": "en",
+                                "AllowEarlyPlay": false,
+                                "PlayerTokenAuthenticationEnabled": false,
+                                "EnableMP4Fallback": false,
+                                "AllowedReferrers": [
+                                    "mydomain.com",
+                                    "myotherdomain.net"
+                                ],
+                                "BlockedReferrers": [],
+                                "BlockNoneReferrer": false,
+                                "WebhookUrl": "https://api.mybackend.net/webook",
+                                "KeepOriginalFiles": true,
+                                "AllowDirectPlay": true,
+                                "EnableDRM": false,
+                                "Bitrate240p": 600,
+                                "Bitrate360p": 800,
+                                "Bitrate480p": 1400,
+                                "Bitrate720p": 2800,
+                                "Bitrate1080p": 5000,
+                                "Bitrate1440p": 8000,
+                                "Bitrate2160p": 13000
+                                }
+                 }
 
+    ```
+* ### Delete Video Library
+    This method deletes the Storage zone with id :storage_zone_id
+    ```
+    >>obj_cdn.DeleteVideoLibrary(id)
+    ```
+    * Success Response
+    ```
+                 {
+                     "status": "success",
+                     "HTTP": 201,
+                     "msg": "Deleted Video Library"
+                 }
+    ```
 * ### Purge Url Cache
     This method purges the given URL from our edge server cache.
     ```
@@ -368,4 +458,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Used similar format as per the official libraries published by [BunnyCDN](https://bunnycdnstorage.docs.apiary.io/)
+* Used similar format as per the official libraries published by [BunnyCDN](https://github.com/BunnyWay/BunnyCDN.PHP.Storage)

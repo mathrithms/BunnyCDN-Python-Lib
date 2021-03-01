@@ -1254,3 +1254,62 @@ class CDN:
                     "msg": err}
         else:
             return self.GetPullZoneList()
+
+    def GetVideoLibrary(self, id):
+        '''
+        Returns the Video Library details for the given ID
+
+        Parameters
+        ----------
+        id       :  number
+                    The ID of the Video Library to return
+
+        '''
+        try:
+            response = requests.get(
+             self._Geturl("videolibrary"), params={'id': id},
+             headers=self.headers,
+            )
+            response.raise_for_status()
+        except HTTPError as http:
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
+        except Exception as err:
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
+        else:
+            return {"status": "success",
+                    "HTTP": response.status_code,
+                    "msg": response.json()
+                    }
+
+    def DeleteVideoLibrary(self, id):
+        '''
+        Deletes the Video Library with the given ID
+
+        Parameters
+        ----------
+        id      : number
+                  The ID of the library that should be deleted
+        '''
+        try:
+            response = requests.delete(
+             self._Geturl(f"videolibrary/{id}"),
+             headers=self.headers,
+            )
+            response.raise_for_status()
+        except HTTPError as http:
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": http}
+        except Exception as err:
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
+        else:
+            return {"status": "success",
+                    "HTTP": response.status_code,
+                    "msg": "Deleted Video Library"
+                    }
