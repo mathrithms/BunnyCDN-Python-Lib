@@ -269,6 +269,31 @@ CDN module has functions that utilize APIs mentioned in official Bunnycdn apiary
     ```
     [{"Name":"storagezone1","Id":"storagezoneid1"},{"Name":"storagezone2","Id":"storagezoneid2"}]
     ```
+* ### Get Storage Zone Data
+    Returns list of dictionaries containing  details of storage zones in account
+    ```
+    >>obj_cdn.StorageZoneData()
+    ```
+    * Success Response
+    ```
+        [
+            {
+             'Id': 53889,
+             'Storage_Zone_Name': 'mystoragezone1',
+             'Usage': 39080459,
+             'host_names': ['test.b-cdn.net', 'cdn.samplehostname.com'],
+             'PullZones': ['mypullzone1']
+             },
+         
+            {
+             'Id': 54559,
+             'Storage_Zone_Name': 'mystoragezone2',
+             'Usage': 0,
+             'host_names': [],
+             'PullZones': ['mypullzone2']
+             }
+        ]
+    ```
 * ### Add Storagezone
     This function creates an new storage zone
     ```
@@ -320,13 +345,71 @@ CDN module has functions that utilize APIs mentioned in official Bunnycdn apiary
                 "msg": "Deleted Storagezone successfully",
             }
     ```
-* ### Delete Video Library
-    This method deletes the Storage zone with id :storage_zone_id
+* ### Get Video Library
+    Gets the details of Video Library of the specified id
     ```
-    >>obj.
+    >>obj_cdn.GetVideoLibrary(id)
     ```
     * Success Response
     ```
+                 {
+                     "status": "success",
+                      "HTTP": 200,
+                      "msg": {
+                                "Id": 1234,
+                                "Name": "My Video Library",
+                                "VideoCount": 24,
+                                "DateCreated": "2021-04-22T00:00:00Z",
+                                "ApiKey": "video-library-api-key",
+                                "ReadOnlyApiKey": "video-library-readonly-api-key",
+                                "HasWatermark": false,
+                                "WatermarkPositionLeft": 70,
+                                "WatermarkPositionTop": 70,
+                                "WatermarkWidth": 12,
+                                "WatermarkHeight": 12,
+                                "EnabledResolutions": "240p,360p,480p",
+                                "VastTagUrl": "https://mydomain.com/vasttag.xml",
+                                "ViAiPublisherId": "vai-publisher-id",
+                                "CaptionsFontSize": "14,",
+                                "CaptionsFontColor": "#fff",
+                                "CaptionsBackground": "#222",
+                                "UILanguage": "en",
+                                "AllowEarlyPlay": false,
+                                "PlayerTokenAuthenticationEnabled": false,
+                                "EnableMP4Fallback": false,
+                                "AllowedReferrers": [
+                                    "mydomain.com",
+                                    "myotherdomain.net"
+                                ],
+                                "BlockedReferrers": [],
+                                "BlockNoneReferrer": false,
+                                "WebhookUrl": "https://api.mybackend.net/webook",
+                                "KeepOriginalFiles": true,
+                                "AllowDirectPlay": true,
+                                "EnableDRM": false,
+                                "Bitrate240p": 600,
+                                "Bitrate360p": 800,
+                                "Bitrate480p": 1400,
+                                "Bitrate720p": 2800,
+                                "Bitrate1080p": 5000,
+                                "Bitrate1440p": 8000,
+                                "Bitrate2160p": 13000
+                                }
+                 }
+
+    ```
+* ### Delete Video Library
+    This method deletes the Storage zone with id :storage_zone_id
+    ```
+    >>obj_cdn.DeleteVideoLibrary(id)
+    ```
+    * Success Response
+    ```
+                 {
+                     "status": "success",
+                     "HTTP": 201,
+                     "msg": "Deleted Video Library"
+                 }
     ```
 * ### Purge Url Cache
     This method purges the given URL from our edge server cache.
