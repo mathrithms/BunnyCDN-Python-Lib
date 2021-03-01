@@ -1,12 +1,12 @@
 # BunnyCDN Python Lib
 BunnyCDN is one of the fastest and most cost effective CDN.
 
-With this BunnyCDN PHP Class you can easily implement it and turbo charge your website content to deliver it at lighting speed to your visitors.
+With this BunnyCDN Python Library you can easily implement it and turbo charge your website content to deliver it at lighting speed to your visitors.
 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will let you install the bunnycdnpython python library running on your local machine.
 
 ### Prerequisites
 Programming language: Python
@@ -320,7 +320,14 @@ CDN module has functions that utilize APIs mentioned in official Bunnycdn apiary
                 "msg": "Deleted Storagezone successfully",
             }
     ```
-
+* ### Delete Video Library
+    This method deletes the Storage zone with id :storage_zone_id
+    ```
+    >>obj.
+    ```
+    * Success Response
+    ```
+    ```
 * ### Purge Url Cache
     This method purges the given URL from our edge server cache.
     ```
