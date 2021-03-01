@@ -573,7 +573,7 @@ class CDN:
         Parameters
         ----------
         PullZoneID            : int64
-                                The ID (number) of the pullzone to return
+                                The ID  of the pullzone to return
         """
         try:
             response = requests.get(

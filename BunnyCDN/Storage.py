@@ -171,7 +171,7 @@ class Storage:
 
     def GetStoragedObjectsList(self, storage_path=None):
         """
-        This functions returns a list of files and directories located in given storage_path.
+        This functions returns a list of files and directories located in given storage path.
         Parameters
         ----------
         storage_path : The directory path that you want to list.
