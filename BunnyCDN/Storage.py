@@ -3,8 +3,11 @@
 import requests
 from requests.exceptions import HTTPError
 
+
 class Storage:
+
     # initializer for storage account
+
     def __init__(self, api_key, storage_zone, storage_zone_region="de"):
         """
         Creates an object for using BunnyCDN Storage API
