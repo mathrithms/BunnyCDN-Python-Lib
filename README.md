@@ -458,4 +458,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Used similar format as per the official libraries published by [BunnyCDN](https://bunnycdnstorage.docs.apiary.io/)
+* Used similar format as per the official libraries published by [BunnyCDN](https://github.com/BunnyWay/BunnyCDN.PHP.Storage)

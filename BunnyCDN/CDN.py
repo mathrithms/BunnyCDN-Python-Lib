@@ -1296,7 +1296,7 @@ class CDN:
         '''
         try:
             response = requests.delete(
-             self._Geturl("videolibrary"), params={'id': id},
+             self._Geturl(f"videolibrary/{id}"),
              headers=self.headers,
             )
             response.raise_for_status()
@@ -1313,4 +1313,3 @@ class CDN:
                     "HTTP": response.status_code,
                     "msg": "Deleted Video Library"
                     }
-
