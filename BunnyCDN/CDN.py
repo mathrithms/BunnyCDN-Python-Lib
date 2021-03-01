@@ -27,6 +27,7 @@ class CDN():
     def _Geturl(self,Task_name):
         '''
         This function is helper for the other methods in code to create appropriate url.
+
         '''
         if Task_name[0]=='/':
             if Task_name[-1]=='/':
@@ -43,6 +44,7 @@ class CDN():
     def AddCertificate(self,PullZoneId,Hostname,Certificate,CertificateKey):
         '''
         This function adds custom certificate to the given pullzone
+
         Parameters
         ----------
         PullZoneId          : int64
@@ -131,6 +133,7 @@ class CDN():
     def StorageZoneData(self):
         '''
         This function returns a list of details of each storage zones in user's account
+
         '''
         try :
             response=requests.get(self._Geturl('storagezone'),headers=self.headers)
@@ -180,6 +183,7 @@ class CDN():
     def AddStorageZone(self,storage_zone_name,storage_zone_region='DE',ReplicationRegions=['DE']):
         '''
         This method creates a new storage zone
+
         Parameters
         ----------
         storage_zone_name        : string
@@ -196,6 +200,7 @@ class CDN():
         
         ReplicationsRegions      : array
         (optional)                 The list of active replication regions for the zone
+
         '''
         values =  json.dumps( {
             "Name": storage_zone_name,
@@ -218,10 +223,12 @@ class CDN():
 
         '''
         This function returns details about the storage zone whose id is mentioned
+
         Parameters
         ----------
         storage_zone_id     :   int64 
                                 The ID of the Storage Zone to return
+
         '''
         try :
             response=requests.get(self._Geturl(f'storagezone/{storage_zone_id}'),headers=self.headers)
@@ -275,6 +282,7 @@ class CDN():
     def Billing(self):
         '''
         This method returns the current billing summary of the account
+
         '''
         try :
             response=requests.get(self._Geturl('billing'),headers=self.headers)
@@ -293,6 +301,7 @@ class CDN():
         Parameters
         ----------
         couponCode  :  The promo code that will be applied
+
         '''
         try :
             response=requests.get(self._Geturl('billing/applycode'),params={'couponCode':couponCode} ,headers=self.headers)
@@ -310,6 +319,7 @@ class CDN():
         
         Parameters
         ----------
+
         dateFrom        : string
         (optional)        The start date of the range the statistics should be returned for. Format: yyyy-mm-dd
         
