@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="bunnycdnpython",
-    version="0.0.1",
+    version="0.0.2",
     author="mathrithms",
     author_email="hello@mathrithms.com",
     description="A python SDK for BunnyCDN",
