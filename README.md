@@ -450,7 +450,11 @@ CDN module has functions that utilize APIs mentioned in official Bunnycdn apiary
 
 * **MATHIRITHMS** - (https://mathrithms.com/)
 
-See also the list of [contributors](https://github.com/mathrithms/BunnyCDN-Python-Lib/graphs/contributors) who participated in this project.
+* **[Contributors:](https://github.com/mathrithms/BunnyCDN-Python-Lib/graphs/contributors)**
+
+    ##### 1. Aaditya Baranwal
+    ##### 2. Joel Thomas
+
 
 ## License
 
