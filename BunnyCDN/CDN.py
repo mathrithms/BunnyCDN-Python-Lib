@@ -1,6 +1,7 @@
 import json
 import requests
 from requests.exceptions import HTTPError
+from urllib import parse
 
 
 class CDN:
@@ -30,13 +31,13 @@ class CDN:
         """
         if Task_name[0] == "/":
             if Task_name[-1] == "/":
-                url = self.base_url + Task_name[1:-1]
+                url = self.base_url + parse.quote(Task_name[1:-1])
             else:
-                url = self.base_url + Task_name[1:]
+                url = self.base_url + parse.quote(Task_name[1:])
         elif Task_name[-1] == "/":
-            url = self.base_url + Task_name[1:-1]
+            url = self.base_url + parse.quote(Task_name[1:-1])
         else:
-            url = self.base_url + Task_name
+            url = self.base_url + parse.quote(Task_name)
         return url
 
     def AddCertificate(self,

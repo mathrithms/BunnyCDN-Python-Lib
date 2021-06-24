@@ -3,6 +3,7 @@
 import os
 import requests
 from requests.exceptions import HTTPError
+from urllib import parse
 
 
 class Storage:
@@ -71,7 +72,7 @@ class Storage:
             storage_path = storage_path[1:]
         if storage_path[-1] == "/":
             storage_path = storage_path[:-1]
-        url = self.base_url + storage_path
+        url = self.base_url + parse.quote(storage_path)
         file_name = url.split("/")[-1]  # For storing file name
 
         # to return appropriate help messages if file is present or not and download file if present
@@ -139,9 +140,9 @@ class Storage:
                 storage_path = storage_path[1:]
             if storage_path[-1] == "/":
                 storage_path = storage_path[:-1]
-            url = self.base_url + storage_path
+            url = self.base_url + parse.quote(storage_path)
         else:
-            url = self.base_url + file_name
+            url = self.base_url + parse.quote(file_name)
         with open(local_upload_file_path, "rb") as file:
             file_data = file.read()
         response = requests.put(url, data=file_data, headers=self.headers)
@@ -177,7 +178,7 @@ class Storage:
             storage_path = storage_path[1:]
         if storage_path[-1] == "/":
             storage_path = storage_path[:-1]
-        url = self.base_url + storage_path
+        url = self.base_url + parse.quote(storage_path)
 
         try:
             response = requests.delete(url, headers=self.headers)
@@ -213,7 +214,7 @@ class Storage:
             if storage_path[0] == "/":
                 storage_path = storage_path[1:]
             if storage_path[-1] != "/":
-                url = self.base_url + storage_path + "/"
+                url = self.base_url + parse.quote(storage_path) + "/"
         else:
             url = self.base_url
         # Sending GET request

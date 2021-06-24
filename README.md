@@ -463,3 +463,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 * Used similar format as per the official libraries published by [BunnyCDN](https://github.com/BunnyWay/BunnyCDN.PHP.Storage)
+
+**For any bugs or issue mail**
+> 1. thomas.2@iitj.ac.in
+> 2. baranwal.1@iitj.ac.in
