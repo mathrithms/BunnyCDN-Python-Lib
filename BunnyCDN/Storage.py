@@ -142,7 +142,7 @@ class Storage:
                 storage_path = storage_path[:-1]
             url = self.base_url + parse.quote(storage_path)
         else:
-            url = self.base_url + parse,quote(file_name)
+            url = self.base_url + parse.quote(file_name)
         with open(local_upload_file_path, "rb") as file:
             file_data = file.read()
         response = requests.put(url, data=file_data, headers=self.headers)
