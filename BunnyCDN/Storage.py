@@ -3,6 +3,7 @@
 import os
 import requests
 from requests.exceptions import HTTPError
+from urllib import parse
 
 
 class Storage:
