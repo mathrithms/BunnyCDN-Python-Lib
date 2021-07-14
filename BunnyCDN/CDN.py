@@ -1240,7 +1240,7 @@ class CDN:
         """
         try:
             response = requests.get(
-                self._Geturl(f"pullzone/loadFreeCertificate"),
+                self._Geturl("pullzone/loadFreeCertificate"),
                 params={'hostname': Hostname},
                 headers=self.headers,
             )
