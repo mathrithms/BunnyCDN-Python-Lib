@@ -1119,11 +1119,11 @@ class CDN:
                               The hostname that will be registered
 
         """
-        values = json.dumps({"PullZoneID": PullZoneID, "Hostname": Hostname})
+        values = json.dumps({"Hostname": Hostname})
 
         try:
             response = requests.post(
-                self._Geturl("pullzone/addHostname"),
+                self._Geturl(f"pullzone/{PullZoneID}/addHostname"),
                 data=values,
                 headers=self.headers
             )
@@ -1158,10 +1158,10 @@ class CDN:
                              The hostname that will be deleted
 
         """
-        params = {"id": PullZoneID, "hostname": Hostname}
+        params = {"hostname": Hostname}
         try:
             response = requests.delete(
-                self._Geturl("pullzone/deleteHostname"),
+                self._Geturl(f"pullzone/{PullZoneID}/removeHostname"),
                 params=params,
                 headers=self.headers,
             )
@@ -1201,13 +1201,12 @@ class CDN:
 
         """
         values = json.dumps(
-            {"PullZoneID": PullZoneID,
-             "Hostname": Hostname,
+            {"Hostname": Hostname,
              "ForceSSL": ForceSSL}
         )
         try:
             response = requests.post(
-                self._Geturl("pullzone/setForceSSL"),
+                self._Geturl(f"pullzone/{PullZoneID}/setForceSSL"),
                 data=values,
                 headers=self.headers
             )
@@ -1241,8 +1240,9 @@ class CDN:
         """
         try:
             response = requests.get(
-             self._Geturl(f"pullzone/loadFreeCertificate?hostname={Hostname}"),
-             headers=self.headers,
+                self._Geturl(f"pullzone/loadFreeCertificate"),
+                params={'hostname': Hostname},
+                headers=self.headers,
             )
             response.raise_for_status()
         except HTTPError as http:
