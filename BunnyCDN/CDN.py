@@ -1158,11 +1158,11 @@ class CDN:
                              The hostname that will be deleted
 
         """
-        params = {"hostname": Hostname}
+        params = {"Hostname": Hostname}
         try:
             response = requests.delete(
                 self._Geturl(f"pullzone/{PullZoneID}/removeHostname"),
-                params=params,
+                json=params,
                 headers=self.headers,
             )
             response.raise_for_status()
