@@ -75,11 +75,13 @@ Storage module has functions that utilize APIs mentioned in official Bunnycdn st
     The storage_path here does not include storage zone name and it should end with the desired file name to be stored in storage zone.(example: 'sample_dir/abc.txt')
     
     The local_upload_file_path is the path of the file in the local PC excluding file name
-* ### Delete File
-    To delete a file from a specific directory in storage zone
+* ### Delete File/Folder
+    To delete a file or folder from a specific directory in storage zone
     ```
     >>obj_storage.DeleteFile(storage_path)
     ```
+    If deleting a folder, make sure the storage_path ends with a trailing slash "/".  
+    Deleting a folder will delete all files within it.
 * ### Get Storaged Objects List
     Returns a list containing name of all the files and folders in the directory specified in storage path
     ```
