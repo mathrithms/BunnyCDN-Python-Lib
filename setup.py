@@ -8,7 +8,7 @@ def readall(path):
 
 setup(
     name="bunnycdnpython",
-    version="0.0.7",
+    version="0.0.8",
     author="mathrithms",
     author_email="hello@mathrithms.com",
     description="A python SDK for BunnyCDN",
