@@ -163,10 +163,10 @@ class Storage:
 
     def DeleteFile(self, storage_path=""):
         """
-        This function deletes a file mentioned in the storage_path from the storage zone
+        This function deletes a file or folder mentioned in the storage_path from the storage zone
         Parameters
         ----------
-        storage_path : The directory path to your file(including file name) which is to be deleted.
+        storage_path : The directory path to your file (including file name) or folder which is to be deleted.
                        If this is the root of your storage zone, you can ignore this parameter.
         """
         # Add code below
@@ -176,8 +176,6 @@ class Storage:
         # to build correct url
         if storage_path[0] == "/":
             storage_path = storage_path[1:]
-        if storage_path[-1] == "/":
-            storage_path = storage_path[:-1]
         url = self.base_url + parse.quote(storage_path)
 
         try:
