@@ -959,8 +959,8 @@ class CDN:
         ActionType,
         TriggerMatchingType,
         Triggers,
-        ExtraActions=None,
         GUID=None,
+        ExtraActions=None,
     ):
 
         """
