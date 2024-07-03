@@ -1,3 +1,4 @@
+[![Downloads](https://static.pepy.tech/badge/Bunnycdnpython)](https://pepy.tech/project/Bunnycdnpython)
 # BunnyCDN Python Lib
 BunnyCDN is one of the fastest and most cost effective CDN.
 
