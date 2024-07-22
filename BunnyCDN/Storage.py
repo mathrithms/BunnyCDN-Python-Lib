@@ -49,7 +49,7 @@ class Storage:
                 + "/"
             )
 
-    def DownloadFile(self, storage_path, download_path=os.getcwd()):
+    def DownloadFile(self, storage_path, download_path=os.getcwd(), file_name=""):
         """
         This function will get the files and subfolders of storage zone mentioned in path
         and download it to the download_path location mentioned
@@ -73,7 +73,8 @@ class Storage:
         if storage_path[-1] == "/":
             storage_path = storage_path[:-1]
         url = self.base_url + parse.quote(storage_path)
-        file_name = url.split("/")[-1]  # For storing file name
+        if file_name == "":
+            file_name = url.split("/")[-1]  # For storing file name
 
         # to return appropriate help messages if file is present or not and download file if present
         try:
