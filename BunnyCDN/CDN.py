@@ -1,3 +1,4 @@
+# from https://github.com/mathrithms/BunnyCDN-Python-Lib/blob/master/BunnyCDN/CDN.py 
 import json
 import requests
 from requests.exceptions import HTTPError
@@ -959,6 +960,7 @@ class CDN:
         TriggerMatchingType,
         Triggers,
         GUID=None,
+        ExtraActions=None,
     ):
 
         """
@@ -1001,75 +1003,47 @@ class CDN:
 
         Triggers                :array
 
+        ExtraActions            :list of arrays
+                                (optional) Extra actions to be added to the
+                                edge rule
         """
-        if GUID is None:
-            values = json.dumps(
-                {
-                    "ActionParameter1": ActionParameter1,
-                    "ActionParameter2": ActionParameter2,
-                    "Enabled": Enabled,
-                    "Description": Description,
-                    "ActionType": ActionType,
-                    "TriggerMatchingType": TriggerMatchingType,
-                    "Triggers": Triggers,
-                }
+        success_msg = "successfully added edgerule"
+        request_payload = {
+                "ActionParameter1": ActionParameter1,
+                "ActionParameter2": ActionParameter2,
+                "Enabled": Enabled,
+                "Description": Description,
+                "ActionType": ActionType,
+                "TriggerMatchingType": TriggerMatchingType,
+                "Triggers": Triggers,
+        }
+        if GUID:
+            request_payload["GUID"] = GUID
+            success_msg = "successfully updated edgerule"
+        if ExtraActions:
+            request_payload["ExtraActions"] = ExtraActions
+        try:
+            response = requests.post(
+                self._Geturl(f"pullzone/{PullZoneID}/edgerules/addOrUpdate"),
+                data=json.dumps(request_payload),
+                headers=self.headers,
             )
-            try:
-                response = requests.post(
-                  self._Geturl(f"pullzone/{PullZoneID}/edgerules/addOrUpdate"),
-                  data=values,
-                  headers=self.headers,
-                )
-                response.raise_for_status()
-            except HTTPError as http:
-                return {"status": "error",
-                        "HTTP": response.status_code,
-                        "msg": http}
-            except Exception as err:
-                return {"status": "error",
-                        "HTTP": response.status_code,
-                        "msg": err}
-            else:
-                return {
-                    "status": "success",
+            response.raise_for_status()
+        except HTTPError as http:
+            return {"status": "error",
                     "HTTP": response.status_code,
-                    "msg": "successfully added edgerule ",
-                }
+                    "msg": http}
+        except Exception as err:
+            return {"status": "error",
+                    "HTTP": response.status_code,
+                    "msg": err}
         else:
-            values = json.dumps(
-                {
-                    "GUID": GUID,
-                    "ActionParameter1": ActionParameter1,
-                    "ActionParameter2": ActionParameter2,
-                    "Enabled": Enabled,
-                    "Description": Description,
-                    "ActionType": ActionType,
-                    "TriggerMatchingType": TriggerMatchingType,
-                    "Triggers": Triggers,
-                }
-            )
+            return {
+                "status": "success",
+                "HTTP": response.status_code,
+                "msg": success_msg,
+            }
 
-            try:
-                response = requests.post(
-                  self._Geturl(f"pullzone/{PullZoneID}/edgerules/addOrUpdate"),
-                  data=values,
-                  headers=self.headers,
-                )
-                response.raise_for_status()
-            except HTTPError as http:
-                return {"status": "error",
-                        "HTTP": response.status_code,
-                        "msg": http}
-            except Exception as err:
-                return {"status": "error",
-                        "HTTP": response.status_code,
-                        "msg": err}
-            else:
-                return {
-                    "status": "success",
-                    "HTTP": response.status_code,
-                    "msg": "successfully updated edgerule ",
-                }
 
     def DeleteEdgeRule(self, PullZoneID, EdgeRuleID):
         """
