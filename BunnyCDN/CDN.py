@@ -22,7 +22,7 @@ class CDN:
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        self.base_url = "https://bunnycdn.com/api/"
+        self.base_url = "https://api.bunny.net/"
 
     def _Geturl(self, Task_name):
         """
