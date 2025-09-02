@@ -111,7 +111,6 @@ class Storage:
         storage_path=None,
         local_upload_file_path=os.getcwd(),
     ):
-
         """
         This function uploads files to your BunnyCDN storage zone
         Parameters
@@ -200,12 +199,56 @@ class Storage:
                 "msg": "Object Successfully Deleted",
             }
 
-    def GetStoragedObjectsList(self, storage_path=None):
+    def _populate_metadata(self, source_dict, target_dict, field_mappings=None):
+        """
+        Helper function to populate target dictionary with values from source dictionary
+
+        Parameters
+        ----------
+        source_dict : dict
+                     The source dictionary containing the data
+        target_dict : dict
+                     The target dictionary to populate
+        field_mappings : dict, optional
+                        Dictionary mapping source keys to target keys
+                        If None, uses direct key mapping
+
+        Returns
+        -------
+        dict : The populated target dictionary
+        """
+        if field_mappings is None:
+            field_mappings = {
+                "Guid": "guid",
+                "StorageZoneName": "storage_zone_name",
+                "Path": "path",
+                "Length": "length",
+                "LastChanged": "last_changed",
+                "ServerId": "server_id",
+                "ArrayNumber": "array_number",
+                "IsDirectory": "is_directory",
+                "UserId": "user_id",
+                "ContentType": "content_type",
+                "DateCreated": "date_created",
+                "StorageZoneId": "storage_zone_id",
+                "Checksum": "checksum",
+                "ReplicatedZones": "replicated_zones",
+            }
+
+        for source_key, target_key in field_mappings.items():
+            if source_key in source_dict:
+                target_dict[target_key] = source_dict[source_key]
+
+        return target_dict
+
+    def GetStoragedObjectsList(self, storage_path=None, include_metadata=False):
         """
         This functions returns a list of files and directories located in given storage_path.
         Parameters
         ----------
         storage_path : The directory path that you want to list.
+        include_metadata : bool, optional
+                          If True, includes additional metadata fields in the response
         """
         # to build correct url
         if storage_path is not None:
@@ -234,5 +277,9 @@ class Storage:
                         temp_dict["File_Name"] = dictionary[key]
                     if key == "ObjectName" and dictionary["IsDirectory"]:
                         temp_dict["Folder_Name"] = dictionary[key]
+
+                if include_metadata:
+                    temp_dict = self._populate_metadata(dictionary, temp_dict)
+
                 storage_list.append(temp_dict)
             return storage_list
